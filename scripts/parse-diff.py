@@ -27,7 +27,7 @@ def extract_name(fullname):
 
 def main(diff_filename):
     year = os.path.split(diff_filename)[1].split('.')[0]
-    
+
     addition_lines, deletion_lines = load_diff(diff_filename)
     merges = load_merges('./rules-handwritten/code-merges.csv')
     splits = load_splits('./rules-handwritten/code-splits.csv')
@@ -36,9 +36,9 @@ def main(diff_filename):
     for line in addition_lines:
         try:
             [code, fullname] = line[2:].split(',')
-            if fullname.endswith("地区"): # or code.endswith("00"):
+            # if code.endswith("00"):
                 # print('skipping: ', [code, fullname], file=sys.stderr)
-                continue
+                # continue
             name = extract_name(fullname)
             if name in additions:
                 print('duplicate additions: ', [code, fullname], additions[name], file=sys.stderr)
@@ -53,33 +53,35 @@ def main(diff_filename):
     code_removals_unaccounted_for = open('./rules-generated/code-removals-unaccounted-for.log', 'a')
     code_changes = open('./rules-generated/code-changes.csv', 'a')
     name_changes = open('./rules-generated/name-changes.csv', 'a')
-                
+
     for line in deletion_lines:
         try:
             [code, fullname] = line[2:].split(',')
         except ValueError:
             continue
         
-        name = extract_name(fullname)
-        if name in additions:
-            [[deleted_code, deleted_name], [added_code, added_name]] = [[code, fullname], additions[name]]
-            print(','.join([year, deleted_code, added_code, deleted_name]), end='', file=code_changes)
-            if deleted_name != added_name:
-                print(' -> ' + added_name, file=code_changes)
-            else:
-                print(file=code_changes)
-            continue
-        
-        if code in additions:
-            print(','.join([year, code, fullname, additions[code][1]]), file=name_changes)
-            continue
-
-        
         change_year = int(year.split('-')[1])
         if change_year in merges and code in merges[change_year]:
             continue
         if change_year in splits and code in splits[change_year]:
             continue
+        
+
+        name = extract_name(fullname)
+        if name in additions:
+            [[deleted_code, deleted_name], [added_code, added_name]] = [[code, fullname], additions[name]]
+            if (((not (deleted_code.endswith("00"))) and (not (added_code.endswith("00")))) or ((deleted_code.endswith("00")) and (added_code.endswith("00")))):
+                print(','.join([year, deleted_code, added_code, deleted_name]), end='', file=code_changes)
+                if deleted_name != added_name:
+                    print(' -> ' + added_name, file=code_changes)
+                else:
+                    print(file=code_changes)
+                continue
+
+        if code in additions:
+            if (((not (code.endswith("00"))) and (not (additions[code][0].endswith("00")))) or ((code.endswith("00")) and (additions[code][0].endswith("00")))):
+                print(','.join([year, code, fullname, additions[code][1]]), file=name_changes)
+                continue
 
         print(year, code, fullname, file=code_removals_unaccounted_for)
 
