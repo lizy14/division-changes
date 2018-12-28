@@ -26,25 +26,25 @@ def code_to_readable(code, year):
         level = '省级'
     return result[:-1] + '[{}]({})'.format(level, code)
 
-def pretty_print(code, year):
-    print('->', code_to_readable(code, year), '-', year)
-
 def translate(code, original_year, verbose=False):
-    code = str(code)
+    codes = [str(code)]
     for year in range(original_year - 1, 2018): # safe margin
-        old_code = code
-        if year in merges and code in merges[year]:
-            code = merges[year][code]
-        elif year in splits and code in splits[year]:
-            code = splits[year][code][0]
-        elif year in code_changes and code in code_changes[year]:
-            code = code_changes[year][code]
-        elif year in name_changes and code in name_changes[year]:
-            code = name_changes[year][code]
-
-        if verbose and old_code != code:  
-            pretty_print(code, year)
-    return code
+        old_codes = codes
+        codes = []
+        for old_code in old_codes:
+            if year in merges and old_code in merges[year]:
+                codes.append(merges[year][old_code])
+            elif year in splits and old_code in splits[year]:
+                codes += splits[year][old_code]
+            elif year in code_changes and old_code in code_changes[year]:
+                codes.append(code_changes[year][old_code])
+            elif year in name_changes and old_code in name_changes[year]:
+                codes.append(name_changes[year][old_code])
+            else:
+                codes.append(old_code)
+        if verbose and old_codes != codes:
+            print('->', [code_to_readable(code, year) for code in codes], '-', year)
+    return codes
 
 def get_code(name, year):
     with open(path_wrapper('tables/{}.csv'.format(year))) as f:
