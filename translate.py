@@ -12,7 +12,7 @@ except:
 
 def code_to_readable(code, year):
     a, b, c = "", "", ""
-    with open(path_wrapper('tables/{}.csv'.format(year))) as f:
+    with open(path_wrapper('tables/{}.csv'.format(year)), encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if line.startswith(code):
@@ -54,7 +54,7 @@ def translate(code, original_year, verbose=False):
 
 def get_code(name, year):
     results = []
-    with open(path_wrapper('tables/{}.csv'.format(year))) as f:
+    with open(path_wrapper('tables/{}.csv'.format(year)), encoding="utf-8") as f:
         for line in f:
             cells = line.strip().split(',')
             if(len(cells) < 2):
@@ -73,10 +73,13 @@ def execute_query(code, year):
 def main():
     DEFAULT_YEAR = 1984
     # REPL
-    import readline
+    try:
+        import readline
+    except:
+        pass
+
     while True:
         try:
-
             query = input('>> ').split(' ')
         except EOFError:
             print('Bye!')

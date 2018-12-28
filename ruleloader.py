@@ -1,6 +1,6 @@
 def load_code_changes(filename):
     code_changes = {}
-    with open(filename) as f:
+    with open(filename, encoding='utf-8') as f:
         for line in f:
             cells = line.strip().split(',')
             change_year = int(cells[0].split('-')[1])
@@ -13,7 +13,7 @@ def load_code_changes(filename):
 
 def load_name_changes(filename):
     name_changes = {}
-    with open(filename) as f:
+    with open(filename, encoding='utf-8') as f:
         for line in f:
             cells = line.strip().split(',')
             change_year = int(cells[0].split('-')[1])
@@ -27,7 +27,7 @@ def load_name_changes(filename):
 
 def load_merges(filename):
     merges = {}
-    with open(filename) as f:
+    with open(filename, encoding='utf-8') as f:
         for line in f:
             [change_year, old, new] = line.strip().split(',')
             change_year = int(change_year)
@@ -39,7 +39,7 @@ def load_merges(filename):
 
 def load_splits(filename):
     splits = {}
-    with open(filename) as f:
+    with open(filename, encoding='utf-8') as f:
         for line in f:
             cells = line.strip().split(',')
             change_year = int(cells[0])
