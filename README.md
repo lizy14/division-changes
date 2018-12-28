@@ -21,7 +21,7 @@ translate("430404", 2000) # 返回 ["430407", "430408"]
 # 对应于今天的湖南省衡阳市石鼓区、蒸湘区
 ```
 
-REPL 方式：`$ python translate.py`
+REPL 方式：`$ python3 translate.py`
 ```
 >> 双江
  * 云南省-临沧地区-双江县(533526)
@@ -58,7 +58,7 @@ REPL 方式：`$ python translate.py`
 ```
 ## 原始数据来源
 
-* 1980年及以后，历年县级及以上行政区划代码表，民政部：http://www.mca.gov.cn/article/sj/xzqh//1980/
+* 1984年及以后，历年县级及以上行政区划代码表，民政部：http://www.mca.gov.cn/article/sj/xzqh//1980/
 * 2006年及以前，历年县级及以上行政区划变更情况文字描述，中国政府网：http://www.gov.cn/test/2006-02/27/content_212020.htm
 * 1999年及以后，历年县级及以上行政区划变更情况文字描述，民政部：http://xzqh.mca.gov.cn/description?dcpid=1
 

@@ -1,9 +1,15 @@
+# coding: utf-8
 import os
+import sys
+if sys.version_info[0] == 2:
+    print("Python 2 is not supported")
+    sys.exit()
 try:
-    from .ruleloader import load_code_changes, load_name_changes, load_merges, load_splits
-except ImportError:
     from ruleloader import load_code_changes, load_name_changes, load_merges, load_splits
-    
+except:
+    from .ruleloader import load_code_changes, load_name_changes, load_merges, load_splits
+
+
 def code_to_readable(code, year):
     a, b, c = "", "", ""
     with open(path_wrapper('tables/{}.csv'.format(year))) as f:
@@ -43,21 +49,26 @@ def translate(code, original_year, verbose=False):
             else:
                 codes.append(old_code)
         if verbose and old_codes != codes:
-            print('->', [code_to_readable(code, year) for code in codes], '-', year)
+            print('->', ', '.join([code_to_readable(code, year) for code in codes]), year)
     return codes
 
 def get_code(name, year):
+    results = []
     with open(path_wrapper('tables/{}.csv'.format(year))) as f:
         for line in f:
             cells = line.strip().split(',')
             if(len(cells) < 2):
                 continue
             if cells[1].startswith(name):
-                return cells[0]
+                results.append(cells[0])
+    return results
+
+
 
 def execute_query(code, year):
     print(' *', code_to_readable(code, year))
     translate(code, int(year), verbose=True)
+    print()
 
 def main():
     DEFAULT_YEAR = 1984
@@ -65,7 +76,7 @@ def main():
     import readline
     while True:
         try:
-            print()
+
             query = input('>> ').split(' ')
         except EOFError:
             print('Bye!')
@@ -76,16 +87,19 @@ def main():
         else:
             year = DEFAULT_YEAR
         if not code_raw.isnumeric():
-            code = None
+            codes = {}
             while True:
-                code = get_code(code_raw, int(year))
-                if code is not None:
-                    execute_query(code, year)
-                    break
+                year_codes = get_code(code_raw, int(year))
+                for year_code in year_codes:
+                    if year_code not in codes:
+                        codes[year_code] = year
+
                 year += 1
                 if year > 2018:
                     break
-            if code is None:
+            for code in codes:
+                execute_query(code, codes[code])
+            if len(codes) == 0:
                 print("没有找到名称以“{}”开头的县级及以上行政区".format(code_raw))
                 continue
         else:
