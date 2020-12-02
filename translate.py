@@ -34,7 +34,7 @@ def code_to_readable(code, year):
 
 def translate(code, original_year, verbose=False):
     codes = [str(code)]
-    for year in range(original_year - 1, 2018): # safe margin
+    for year in range(original_year - 1, 2018 + 1): 
         old_codes = codes
         codes = []
         for old_code in old_codes:
