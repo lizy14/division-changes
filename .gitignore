@@ -1,1 +1,5 @@
 __pycache__/
+.idea
+scripts/*.html
+scripts/*.csv
+scripts/*.diff
