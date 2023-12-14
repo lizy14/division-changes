@@ -58,7 +58,7 @@ REPL 方式：`$ python3 translate.py`
 ```
 ## 原始数据来源
 
-* 1984年及以后，历年县级及以上行政区划代码表，民政部：http://www.mca.gov.cn/article/sj/xzqh//1980/
+* 1984年及以后，历年县级及以上行政区划代码表，民政部：https://www.mca.gov.cn/n156/n186/index.html
 * 2006年及以前，历年县级及以上行政区划变更情况文字描述，中国政府网：http://www.gov.cn/test/2006-02/27/content_212020.htm
 * 1999年及以后，历年县级及以上行政区划变更情况文字描述，民政部：http://xzqh.mca.gov.cn/description?dcpid=1
 
