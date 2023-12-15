@@ -39,5 +39,5 @@ wget -O 2017.html http://www.mca.gov.cn/article/sj/tjbz/a/2018/201803131439.html
 wget -O 2018.html https://www.mca.gov.cn/mzsj/xzqh/1980/201903/201903011447.html
 wget -O 2019.html https://www.mca.gov.cn/mzsj/xzqh/1980/2019/202002281436.html
 wget -O 2020.html https://www.mca.gov.cn/mzsj/xzqh/2020/20201201.html
-#wget -O 2021.html https://www.mca.gov.cn/mzsj/xzqh/2021/20211201.html # 2021年的数据格式与其他年份不一致
+#wget -O 2021.html https://www.mca.gov.cn/mzsj/xzqh/2021/20211201.html # 2021年的数据格式与其他年份不一致，已手动录入为 2021.csv
 wget -O 2022.html https://www.mca.gov.cn/mzsj/xzqh/2022/202201xzqh.html
