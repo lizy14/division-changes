@@ -1,6 +1,8 @@
 import re
 import os
 import sys
+
+sys.path.append("../")
 from ruleloader import load_merges, load_splits
 
 
@@ -29,11 +31,12 @@ def extract_name(fullname):
 
 
 def main(diff_filename):
+    print("diff file name: " + diff_filename)
     year = os.path.split(diff_filename)[1].split(".")[0]
 
     addition_lines, deletion_lines = load_diff(diff_filename)
-    merges = load_merges("./rules-handwritten/code-merges.csv")
-    splits = load_splits("./rules-handwritten/code-splits.csv")
+    merges = load_merges("../rules-handwritten/code-merges.csv")
+    splits = load_splits("../rules-handwritten/code-splits.csv")
 
     additions = {}
     for line in addition_lines:
