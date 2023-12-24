@@ -32,24 +32,51 @@ def code_to_readable(code, year):
         level = '省级'
     return result[:-1] + '[{}]({})'.format(level, code)
 
-def translate(code, original_year, verbose=False):
+MIN_SUPPORTED_YEAR = 1984
+MAX_SUPPORTED_YEAR = 2018
+
+def translate(code, original_year, target_year=MAX_SUPPORTED_YEAR, verbose=False):
+    if original_year < MIN_SUPPORTED_YEAR or original_year > MAX_SUPPORTED_YEAR:
+        raise ValueError(f"仅支持{MIN_SUPPORTED_YEAR}年至{MAX_SUPPORTED_YEAR}年的行政区划代码")
     codes = [str(code)]
-    for year in range(original_year - 1, 2018 + 1): 
-        old_codes = codes
-        codes = []
-        for old_code in old_codes:
-            if year in merges and old_code in merges[year]:
-                codes.append(merges[year][old_code])
-            elif year in splits and old_code in splits[year]:
-                codes += splits[year][old_code]
-            elif year in code_changes and old_code in code_changes[year]:
-                codes.append(code_changes[year][old_code])
-            elif year in name_changes and old_code in name_changes[year]:
-                codes.append(name_changes[year][old_code])
-            else:
-                codes.append(old_code)
-        if verbose and old_codes != codes:
-            print('->', ', '.join([code_to_readable(code, year) for code in codes]), year)
+    if original_year < target_year:
+        for year in range(original_year - 1, target_year + 1):
+            old_codes = codes
+            codes = []
+            for old_code in old_codes:
+                if year in merges and old_code in merges[year]:
+                    codes.append(merges[year][old_code])
+                elif year in splits and old_code in splits[year]:
+                    codes += splits[year][old_code]
+                elif year in code_changes and old_code in code_changes[year]:
+                    codes.append(code_changes[year][old_code])
+                elif year in name_changes and old_code in name_changes[year]:
+                    codes.append(name_changes[year][old_code])
+                else:
+                    codes.append(old_code)
+            if verbose and old_codes != codes:
+                print('->', ', '.join([code_to_readable(code, year) for code in codes]), year)
+    elif original_year > target_year:
+        for year in range(original_year, target_year - 1, -1):
+            old_codes = codes
+            codes = []
+            for old_code in old_codes:
+                if year in demerges and old_code in demerges[year]:
+                    codes.append(old_code)
+                    codes += demerges[year][old_code]
+                elif year in unsplit and old_code in unsplit[year]:
+                    codes.append(unsplit[year][old_code])
+                elif year in reverse_code_changes and old_code in reverse_code_changes[year]:
+                    codes.append(reverse_code_changes[year][old_code])
+                elif year in reverse_name_changes and old_code in reverse_name_changes[year]:
+                    codes.append(reverse_name_changes[year][old_code])
+                else:
+                    codes.append(old_code)
+            if verbose and old_codes != codes:
+                print('<-', ', '.join([code_to_readable(code, year) for code in codes]), year)
+    else:
+        if verbose:
+            print("original year == target year, no need to translate")
     return codes
 
 def get_code(name, year):
@@ -71,7 +98,7 @@ def execute_query(code, year):
     print()
 
 def main():
-    DEFAULT_YEAR = 1984
+    DEFAULT_YEAR = MIN_SUPPORTED_YEAR
     # REPL
     try:
         import readline
@@ -98,7 +125,7 @@ def main():
                         codes[year_code] = year
 
                 year += 1
-                if year > 2018:
+                if year > MAX_SUPPORTED_YEAR:
                     break
             for code in codes:
                 execute_query(code, codes[code])
@@ -113,10 +140,37 @@ def main():
 def path_wrapper(filename):
     return os.path.join(os.path.dirname(__file__), filename)
 
+
 merges = load_merges(path_wrapper('rules-handwritten/code-merges.csv'))
 splits = load_splits(path_wrapper('rules-handwritten/code-splits.csv'))
 code_changes = load_code_changes(path_wrapper('rules-generated/code-changes.csv'))
 name_changes = load_name_changes(path_wrapper('rules-generated/name-changes.csv'))
+
+# 反向查询所需数据结构
+demerges = {}
+for year, merge in merges.items():
+    for old, new in merge.items():
+        if new in demerges.get(year, {}):
+            demerges[year][new].append(old)
+        else:
+            demerges.setdefault(year, {})[new] = [old]
+
+unsplit = {}
+for year, split in splits.items():
+    for old, news in split.items():
+        for new in news:
+            unsplit.setdefault(year, {})[new] = old
+
+reverse_code_changes = {}
+for year, changes in code_changes.items():
+    for old, new in changes.items():
+        reverse_code_changes.setdefault(year, {})[new] = old
+
+reverse_name_changes = {}
+for year, changes in name_changes.items():
+    for old, new in changes.items():
+        reverse_name_changes.setdefault(year, {})[new] = old
+
 
 if __name__ == "__main__":
     main()
