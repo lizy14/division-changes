@@ -2,13 +2,13 @@ from translate import translate
 
 
 def test_translate_examples_in_readme():
-    assert translate("512323", 1984, 2018) == ["500119"]
     # 1984年的四川省涪陵地区南川县
     # 对应于今天的重庆市南川区
+    assert translate("512323", 1984, 2018) == ["500119"]
 
-    translate("430404", 2000, 2018) == ["430407", "430408"]
     # 2000年的湖南省衡阳市城北区
     # 对应于今天的湖南省衡阳市石鼓区、蒸湘区
+    assert translate("430404", 2000, 2018) == ["430407", "430408"]
 
 def test_translate_code_change():
     '''
