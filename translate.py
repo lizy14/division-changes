@@ -37,7 +37,9 @@ MAX_SUPPORTED_YEAR = 2018
 
 def translate(code, original_year, target_year=MAX_SUPPORTED_YEAR, verbose=False):
     if original_year < MIN_SUPPORTED_YEAR or original_year > MAX_SUPPORTED_YEAR:
-        raise ValueError(f"仅支持{MIN_SUPPORTED_YEAR}年至{MAX_SUPPORTED_YEAR}年的行政区划代码")
+        raise ValueError(f"仅支持{MIN_SUPPORTED_YEAR}年至{MAX_SUPPORTED_YEAR}年的行政区划代码转换，您指定的起始年份{original_year}超出范围")
+    if target_year < MIN_SUPPORTED_YEAR or target_year > MAX_SUPPORTED_YEAR:
+        raise ValueError(f"仅支持{MIN_SUPPORTED_YEAR}年至{MAX_SUPPORTED_YEAR}年的行政区划代码转换，您指定的目标年份{target_year}超出范围")
     codes = [str(code)]
     if original_year < target_year:
         for year in range(original_year - 1, target_year + 1):
@@ -76,7 +78,7 @@ def translate(code, original_year, target_year=MAX_SUPPORTED_YEAR, verbose=False
                 print('<-', ', '.join([code_to_readable(code, year) for code in codes]), year)
     else:
         if verbose:
-            print("original year == target year, no need to translate")
+            print("您指定的起始年和目标年相同，无需转换")
     return codes
 
 def get_code(name, year):
