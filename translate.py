@@ -35,7 +35,7 @@ def code_to_readable(code, year):
 
 
 MIN_SUPPORTED_YEAR = 1984
-MAX_SUPPORTED_YEAR = 2018
+MAX_SUPPORTED_YEAR = 2022
 
 def translate(code, original_year, target_year=MAX_SUPPORTED_YEAR, verbose=False):
     if original_year < MIN_SUPPORTED_YEAR or original_year > MAX_SUPPORTED_YEAR:
