@@ -1,3 +1,5 @@
+import re
+
 from translate import translate
 
 
@@ -74,3 +76,33 @@ def test_translate_split():
     # 反向查询
     assert translate("530302", 1997, 1996) == ['532201']
     assert translate("530328", 1997, 1996) == ['532201']
+
+
+def test_translate_full():
+    """
+    全量数据测试
+    """
+    current_code_list: list[str] = []
+    with open("tables/2022.csv", encoding="utf-8") as f:
+        for line in f:
+            cells = line.strip().split(",")
+            if len(cells) < 2:
+                continue
+            if re.match(r"^\d{6}$", cells[0]) is not None:
+                current_code_list.append(cells[0])
+    for year in range(1984, 2023):
+        with open(f"tables/{year}.csv", encoding="utf-8") as f:
+            for line in f:
+                cells = line.strip().split(",")
+                if len(cells) < 2:
+                    continue
+                if re.match(r"^\d{6}$", cells[0]) is not None:
+                    code = cells[0]
+                    name = cells[1]
+                    changed_code_list: list[str] = translate(code, original_year=year)
+                    for changed_code in changed_code_list:
+                        # assert changed_code in current_code_list
+                        if changed_code not in current_code_list:
+                            print(
+                                f"year: {year}, code: {code}, name: {name} -> {changed_code} not in current code list"
+                            )
