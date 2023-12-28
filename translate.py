@@ -1,6 +1,7 @@
 # coding: utf-8
 import os
 import sys
+
 if sys.version_info[0] == 2:
     print("Python 2 is not supported")
     sys.exit()
@@ -12,28 +13,29 @@ except:
 
 def code_to_readable(code, year):
     a, b, c = "", "", ""
-    with open(path_wrapper('tables/{}.csv'.format(year)), encoding="utf-8") as f:
+    with open(path_wrapper("tables/{}.csv".format(year)), encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if line.startswith(code):
-                a = line.split(',')[1]
+                a = line.split(",")[1]
             if not code.endswith("00") and line.startswith(code[0:4] + "00"):
-                b = line.split(',')[1]
+                b = line.split(",")[1]
             if not code.endswith("0000") and line.startswith(code[0:2] + "0000"):
-                c = line.split(',')[1]
+                c = line.split(",")[1]
     result = ""
     for t in [c, b, a]:
         if t:
             result += t + "-"
-    level = '县级'
-    if code.endswith('00'):
-        level = '地级'
-    if code.endswith('0000'):
-        level = '省级'
-    return result[:-1] + '[{}]({})'.format(level, code)
+    level = "县级"
+    if code.endswith("00"):
+        level = "地级"
+    if code.endswith("0000"):
+        level = "省级"
+    return result[:-1] + "[{}]({})".format(level, code)
+
 
 MIN_SUPPORTED_YEAR = 1984
-MAX_SUPPORTED_YEAR = 2018
+MAX_SUPPORTED_YEAR = 2022
 
 def translate(code, original_year, target_year=MAX_SUPPORTED_YEAR, verbose=False):
     if original_year < MIN_SUPPORTED_YEAR or original_year > MAX_SUPPORTED_YEAR:
@@ -41,6 +43,7 @@ def translate(code, original_year, target_year=MAX_SUPPORTED_YEAR, verbose=False
     if target_year < MIN_SUPPORTED_YEAR or target_year > MAX_SUPPORTED_YEAR:
         raise ValueError(f"仅支持{MIN_SUPPORTED_YEAR}年至{MAX_SUPPORTED_YEAR}年的行政区划代码转换，您指定的目标年份{target_year}超出范围")
     codes = [str(code)]
+    
     if original_year < target_year:
         for year in range(original_year - 1, target_year + 1):
             old_codes = codes
@@ -79,25 +82,27 @@ def translate(code, original_year, target_year=MAX_SUPPORTED_YEAR, verbose=False
     else:
         if verbose:
             print("您指定的起始年和目标年相同，无需转换")
+    
     return codes
+
 
 def get_code(name, year):
     results = []
-    with open(path_wrapper('tables/{}.csv'.format(year)), encoding="utf-8") as f:
+    with open(path_wrapper("tables/{}.csv".format(year)), encoding="utf-8") as f:
         for line in f:
-            cells = line.strip().split(',')
-            if(len(cells) < 2):
+            cells = line.strip().split(",")
+            if len(cells) < 2:
                 continue
             if cells[1].startswith(name):
                 results.append(cells[0])
     return results
 
 
-
 def execute_query(code, year):
-    print(' *', code_to_readable(code, year))
+    print(" *", code_to_readable(code, year))
     translate(code, int(year), verbose=True)
     print()
+
 
 def main():
     DEFAULT_YEAR = MIN_SUPPORTED_YEAR
@@ -109,12 +114,12 @@ def main():
 
     while True:
         try:
-            query = input('>> ').split(' ')
+            query = input(">> ").split(" ")
         except EOFError:
-            print('Bye!')
+            print("Bye!")
             break
         code_raw = query[0]
-        if(len(query) > 1):
+        if len(query) > 1:
             year = query[1]
         else:
             year = DEFAULT_YEAR
@@ -143,10 +148,10 @@ def path_wrapper(filename):
     return os.path.join(os.path.dirname(__file__), filename)
 
 
-merges = load_merges(path_wrapper('rules-handwritten/code-merges.csv'))
-splits = load_splits(path_wrapper('rules-handwritten/code-splits.csv'))
-code_changes = load_code_changes(path_wrapper('rules-generated/code-changes.csv'))
-name_changes = load_name_changes(path_wrapper('rules-generated/name-changes.csv'))
+merges = load_merges(path_wrapper("rules-handwritten/code-merges.csv"))
+splits = load_splits(path_wrapper("rules-handwritten/code-splits.csv"))
+code_changes = load_code_changes(path_wrapper("rules-generated/code-changes.csv"))
+name_changes = load_name_changes(path_wrapper("rules-generated/name-changes.csv"))
 
 # 反向查询所需数据结构
 demerges = {}

@@ -1,0 +1,5 @@
+# Only nacessary if you are developing this project.
+# No third-party package is needed to run translate.translate().
+beautifulsoup4
+html2text
+pytest

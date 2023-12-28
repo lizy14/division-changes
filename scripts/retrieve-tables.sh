@@ -36,4 +36,8 @@ wget -O 2014.html http://files2.mca.gov.cn/cws/201502/20150225163817214.html
 wget -O 2015.html http://www.mca.gov.cn/article/sj/tjbz/a/2015/201706011127.html
 wget -O 2016.html http://www.mca.gov.cn/article/sj/tjbz/a/2016/201612/201705311652.html
 wget -O 2017.html http://www.mca.gov.cn/article/sj/tjbz/a/2018/201803131439.html
-wget -O 2018.html http://www.mca.gov.cn/article/sj/xzqh/2018/201804-12/20181011221630.html
+wget -O 2018.html https://www.mca.gov.cn/mzsj/xzqh/1980/201903/201903011447.html
+wget -O 2019.html https://www.mca.gov.cn/mzsj/xzqh/1980/2019/202002281436.html
+wget -O 2020.html https://www.mca.gov.cn/mzsj/xzqh/2020/20201201.html
+#wget -O 2021.html https://www.mca.gov.cn/mzsj/xzqh/2021/20211201.html # 2021年的数据格式与其他年份不一致，已手动录入为 2021.csv
+wget -O 2022.html https://www.mca.gov.cn/mzsj/xzqh/2022/202201xzqh.html

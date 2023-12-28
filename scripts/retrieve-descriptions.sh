@@ -1,12 +1,18 @@
-for i in $(seq 1999 2017); do
+# Install html2text
+# pip3 install html2text
+
+# Download description HTML pages from 1999 to 2022
+for i in $(seq 1999 2022); do
     curl http://xzqh.mca.gov.cn/description?dcpid=$i > $i.html;
 done
 
-for i in $(seq 1999 2017); do
+# Convert HTMLs to txt
+for i in $(seq 1999 2022); do
     echo $i;
     cat $i.html | iconv --from-code=gbk --to-code=utf8 | html2text > $i.txt;
 done
 
+# Download description HTML pages from 1949 to 2006
 curl http://www.gov.cn/test/2007-03/23/content_558707.htm > 1949年.html 
 curl http://www.gov.cn/test/2007-03/23/content_558725.htm > 1950年.html 
 curl http://www.gov.cn/test/2007-03/23/content_558757.htm > 1951年.html 
@@ -66,6 +72,7 @@ curl http://www.gov.cn/test/2007-03/23/content_559291.htm > 2004年.html
 curl http://www.gov.cn/test/2007-03/23/content_559298.htm > 2005年.html 
 curl http://www.gov.cn/test/2007-03/23/content_559299.htm > 2006年.html 
 
+# Convert HTMLs to txt
 for i in $(seq 1949 2006); do
     echo $i;
     cat $i年.html | html2text > $i年.txt;
