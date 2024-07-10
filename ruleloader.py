@@ -48,3 +48,16 @@ def load_splits(filename):
                 splits[change_year] = {}
             splits[change_year][old] = cells[2:]
     return splits
+
+def load_dumps(filename):
+    dumps = {}
+    with open(filename, encoding="utf-8") as f:
+        for line in f:
+            cells = line.strip().split(",")
+            change_year = int(cells[0])
+            new = cells[3]
+            if change_year not in dumps:
+                dumps[change_year] = {}
+            dumps[change_year][new] = cells[1:]
+    return dumps
+

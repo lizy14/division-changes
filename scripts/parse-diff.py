@@ -3,7 +3,7 @@ import os
 import sys
 
 sys.path.append("../")
-from ruleloader import load_merges, load_splits
+from ruleloader import load_merges, load_splits, load_dumps
 
 
 def load_diff(diff_filename):
@@ -37,17 +37,43 @@ def main(diff_filename):
     addition_lines, deletion_lines = load_diff(diff_filename)
     merges = load_merges("../rules-handwritten/code-merges.csv")
     splits = load_splits("../rules-handwritten/code-splits.csv")
+    dumps = load_dumps("../rules-handwritten/dumps.csv")
 
     additions = {}
+    dumps_changes = []
     for line in addition_lines:
         try:
             [code, fullname] = line[2:].split(",")
+            if not code.isdigit():
+                continue
             # if code.endswith("00"):
             # print('skipping: ', [code, fullname], file=sys.stderr)
             # continue
+
+            change_year = int(year.split("-")[1])
+            if change_year in dumps and code in dumps[change_year]:
+                dumps_changes.append(dumps[change_year][code])
+                continue
+
             name = extract_name(fullname)
-            if name in additions:
-                print("duplicate additions: ", [code, fullname], additions[name], file=sys.stderr)
+            if name in additions or fullname == "郊区" or fullname == "城区": # 城区 郊区太多了, 只有一个也可能误判
+                # 判断是否已手动处理过
+                handle = False
+                if change_year in merges:
+                    for v in merges[change_year]:
+                        if merges[change_year][v] == code:
+                            handle = True
+                            break
+                if handle == False and change_year in splits:
+                    for v in splits[change_year]:
+                        if code in splits[change_year][v]:
+                            handle = True
+                            break
+                if handle == False:
+                    if name in additions:
+                        print("duplicate additions: ", [code, fullname], additions[name], file=sys.stderr)
+                    else:
+                        print("duplicate additions: ", [code, fullname], file=sys.stderr)
             else:
                 additions[name] = [code, fullname]
                 additions[code] = [code, fullname]
@@ -55,13 +81,38 @@ def main(diff_filename):
             pass
 
     # output files
-    code_removals_unaccounted_for = open("./rules-generated/code-removals-unaccounted-for.log", "a")
-    code_changes = open("./rules-generated/code-changes.csv", "a")
-    name_changes = open("./rules-generated/name-changes.csv", "a")
+    code_removals_unaccounted_for = open("../rules-generated/code-removals-unaccounted-for.log", "a")
+    code_changes = open("../rules-generated/code-changes.csv", "a")
+    name_changes = open("../rules-generated/name-changes.csv", "a")
+
+    # 处理名称重复的部分
+    for line in dumps_changes:
+        if len(line) == 4:
+            [[deleted_code, deleted_name], [added_code, added_name]] = [[line[0], line[1]], [line[2], line[3]]]
+            if deleted_code == added_code and deleted_name == added_name:
+                # 完全相同, 直接跳过
+                pass
+            elif deleted_code == added_code and deleted_name != added_name:
+                # 名称变化
+                print(",".join([year, added_code, deleted_name, added_name]), file=name_changes)
+            elif deleted_code != added_code and deleted_name == added_name:
+                # 代码变化
+                print(",".join([year, deleted_code, added_code, deleted_name]), file=code_changes)
+            else:
+                # 名称 代码都变化
+                print(",".join([year, deleted_code, added_code, deleted_name]), end="", file=code_changes)
+                print(" -> " + added_name, file=code_changes)
+            # 删除已处理的代码
+            deletion_lines.remove("< " + deleted_code + "," + deleted_name)
+            continue
+        # 待定
+        print(year, line, file=code_removals_unaccounted_for)
 
     for line in deletion_lines:
         try:
             [code, fullname] = line[2:].split(",")
+            if not code.isdigit():
+                continue
         except ValueError:
             continue
 
