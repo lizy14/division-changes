@@ -13,12 +13,11 @@
 ## 目录
 
 - [安装](#安装)
-  - [也可不安装直接使用](#也可不安装直接使用)
 - [查询示例](#查询示例)
   - [API 方式](#api-方式)
   - [REPL 方式](#repl-方式)
 - [原始数据来源](#原始数据来源)
-- [Credits](#credits)
+- [Credits](#鸣谢)
 
 ## 安装
 
@@ -34,9 +33,7 @@ pip install .
 pip install "git+https://github.com/lizy14/division-changes.git"
 ```
 
-### 也可不安装直接使用
-
-下载或克隆本仓库后，在仓库根目录直接执行 `python3 translate.py` 即可。下方“查询示例”中的 `from division_changes.translate import translate` 也可在仓库根目录直接使用，无需 pip 安装。
+也可不安装直接使用：在仓库根目录运行下方“查询示例”中的命令即可。
 
 ## 查询示例
 
@@ -71,7 +68,11 @@ translate("110102", 2010, 2000) # 返回 ['110102', '110104']
 
 输入行政区划名称，按时间顺序打印变更历史。
 
-`$ division-changes`
+```bash
+$ division-changes
+# 如果未安装直接使用：
+$ python3 translate.py
+```
 
 ```
 >> 双江
@@ -113,7 +114,7 @@ translate("110102", 2010, 2000) # 返回 ['110102', '110104']
 * 2006年及以前，历年县级及以上行政区划变更情况文字描述，中国政府网：http://www.gov.cn/test/2006-02/27/content_212020.htm
 * 1999年及以后，历年县级及以上行政区划变更情况文字描述，民政部：http://xzqh.mca.gov.cn/description?dcpid=1
 
-## Credits
+## 鸣谢
 
 [@jianghc724](https://github.com/jianghc724)
 [@lizy14](https://github.com/lizy14)
