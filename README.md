@@ -8,6 +8,33 @@
 
 变更记录的大部分由程序比对历年行政区划代码表、自动匹配生成，少部分经手工整理、订正。
 
+> 注：台湾省（710000）、香港特别行政区（810000）、澳门特别行政区（820000）的代码表暂缺。
+
+## 目录
+
+- [安装](#安装)
+- [查询示例](#查询示例)
+  - [API 方式](#api-方式)
+  - [REPL 方式](#repl-方式)
+- [原始数据来源](#原始数据来源)
+- [鸣谢](#鸣谢)
+
+## 安装
+
+下载或克隆本仓库后，运行：
+
+```bash
+pip install .
+```
+
+或者直接从 GitHub 安装：
+
+```bash
+pip install "git+https://github.com/lizy14/division-changes.git"
+```
+
+也可不安装直接使用：在仓库根目录运行下方“查询示例”中的命令即可。
+
 ## 查询示例
 
 ### API 方式
@@ -15,7 +42,7 @@
 输入代码、起始年份、目标年份，返回代码列表。支持起始年份小于或大于目标年份。
 
 ```python
-from translate import translate
+from division_changes import translate
 
 
 # 正向查询（起始年份 < 目标年份）
@@ -41,7 +68,11 @@ translate("110102", 2010, 2000) # 返回 ['110102', '110104']
 
 输入行政区划名称，按时间顺序打印变更历史。
 
-`$ python3 translate.py`
+```bash
+$ division-changes
+# 如果未安装直接使用：
+$ python3 translate.py
+```
 
 ```
 >> 双江
@@ -83,7 +114,7 @@ translate("110102", 2010, 2000) # 返回 ['110102', '110104']
 * 2006年及以前，历年县级及以上行政区划变更情况文字描述，中国政府网：http://www.gov.cn/test/2006-02/27/content_212020.htm
 * 1999年及以后，历年县级及以上行政区划变更情况文字描述，民政部：http://xzqh.mca.gov.cn/description?dcpid=1
 
-## Credits
+## 鸣谢
 
 [@jianghc724](https://github.com/jianghc724)
 [@lizy14](https://github.com/lizy14)

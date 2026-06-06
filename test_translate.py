@@ -1,6 +1,6 @@
 import re
 
-from translate import translate
+from division_changes import translate
 
 
 def test_translate_examples_in_readme():
