@@ -10,6 +10,16 @@
 
 > 注：台湾省（710000）、香港特别行政区（810000）、澳门特别行政区（820000）的代码表暂缺。
 
+## 目录
+
+- [安装](#安装)
+  - [也可不安装直接使用](#也可不安装直接使用)
+- [查询示例](#查询示例)
+  - [API 方式](#api-方式)
+  - [REPL 方式](#repl-方式)
+- [原始数据来源](#原始数据来源)
+- [Credits](#credits)
+
 ## 安装
 
 下载或克隆本仓库后，运行：
@@ -24,9 +34,9 @@ pip install .
 pip install "git+https://github.com/lizy14/division-changes.git"
 ```
 
-## 也可不安装直接使用
+### 也可不安装直接使用
 
-下载或克隆本仓库后，在仓库根目录直接执行 `python3 translate.py` 即可。
+下载或克隆本仓库后，在仓库根目录直接执行 `python3 translate.py` 即可。下方“查询示例”中的 `from division_changes.translate import translate` 也可在仓库根目录直接使用，无需 pip 安装。
 
 ## 查询示例
 
