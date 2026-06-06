@@ -5,10 +5,7 @@ import sys
 if sys.version_info[0] == 2:
     print("Python 2 is not supported")
     sys.exit()
-try:
-    from ruleloader import load_code_changes, load_name_changes, load_merges, load_splits
-except:
-    from .ruleloader import load_code_changes, load_name_changes, load_merges, load_splits
+from .ruleloader import load_code_changes, load_name_changes, load_merges, load_splits
 
 
 def code_to_readable(code, year):
@@ -145,7 +142,16 @@ def main():
 
 
 def path_wrapper(filename):
-    return os.path.join(os.path.dirname(__file__), filename)
+    pkg_dir = os.path.dirname(__file__)
+    # Source checkout: data dirs at repo root (parent of package dir)
+    src_path = os.path.join(os.path.dirname(pkg_dir), filename)
+    if os.path.exists(src_path):
+        return src_path
+    # pip install (data_files): typically under sys.prefix
+    installed_path = os.path.join(sys.prefix, filename)
+    if os.path.exists(installed_path):
+        return installed_path
+    return src_path
 
 
 merges = load_merges(path_wrapper("rules-handwritten/code-merges.csv"))

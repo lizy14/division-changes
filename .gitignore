@@ -3,3 +3,6 @@ __pycache__/
 scripts/*.html
 scripts/*.csv
 scripts/*.diff
+build/
+dist/
+*.egg-info/
