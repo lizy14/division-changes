@@ -24,6 +24,10 @@ pip install .
 pip install "git+https://github.com/lizy14/division-changes.git"
 ```
 
+## 也可不安装直接使用
+
+下载或克隆本仓库后，在仓库根目录直接执行 `python3 translate.py` 即可。
+
 ## 查询示例
 
 ### API 方式
