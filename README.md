@@ -17,7 +17,7 @@
   - [API 方式](#api-方式)
   - [REPL 方式](#repl-方式)
 - [原始数据来源](#原始数据来源)
-- [Credits](#鸣谢)
+- [鸣谢](#鸣谢)
 
 ## 安装
 
@@ -42,7 +42,7 @@ pip install "git+https://github.com/lizy14/division-changes.git"
 输入代码、起始年份、目标年份，返回代码列表。支持起始年份小于或大于目标年份。
 
 ```python
-from division_changes.translate import translate
+from division_changes import translate
 
 
 # 正向查询（起始年份 < 目标年份）
