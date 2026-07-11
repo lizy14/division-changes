@@ -25,6 +25,9 @@ def test_translate_name_change():
      * 辽宁省-铁岭市-铁法市(211281)
     -> 辽宁省-铁岭市-调兵山市(211281) 2002
     """
+    import io
+    from contextlib import redirect_stdout
+
     assert translate("211281", 1995, 2001) == ["211281"]
     assert translate("211281", 1995, 2002) == ["211281"]
     assert translate("211281", 1995, 2022) == ["211281"]
@@ -32,6 +35,22 @@ def test_translate_name_change():
     # 反向查询
     assert translate("211281", 2022, 2001) == ["211281"]
     assert translate("211281", 2022, 1996) == ["211281"]
+
+    # 验证verbose输出包含2002年的更名信息（正向）
+    buf = io.StringIO()
+    with redirect_stdout(buf):
+        translate("211281", 1995, 2022, verbose=True)
+    output = buf.getvalue()
+    assert "调兵山市" in output
+    assert "2002" in output
+
+    # 验证verbose输出包含2002年的更名信息（反向）
+    buf = io.StringIO()
+    with redirect_stdout(buf):
+        translate("211281", 2022, 1995, verbose=True)
+    output = buf.getvalue()
+    assert "调兵山市" in output
+    assert "2002" in output
 
 
 def test_translate_code_change():
