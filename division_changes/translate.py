@@ -45,6 +45,7 @@ def translate(code, original_year, target_year=MAX_SUPPORTED_YEAR, verbose=False
         for year in range(original_year - 1, target_year + 1):
             old_codes = codes
             codes = []
+            name_changed = False
             for old_code in old_codes:
                 if year in merges and old_code in merges[year]:
                     codes.append(merges[year][old_code])
@@ -54,9 +55,10 @@ def translate(code, original_year, target_year=MAX_SUPPORTED_YEAR, verbose=False
                     codes.append(code_changes[year][old_code])
                 elif year in name_changes and old_code in name_changes[year]:
                     codes.append(name_changes[year][old_code])
+                    name_changed = True
                 else:
                     codes.append(old_code)
-            if verbose and old_codes != codes:
+            if verbose and (old_codes != codes or name_changed):
                 print('->', ', '.join([code_to_readable(code, year) for code in codes]), year)
     elif original_year > target_year:
         for year in range(original_year, target_year - 1, -1):

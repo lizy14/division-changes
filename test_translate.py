@@ -17,6 +17,23 @@ def test_translate_examples_in_readme():
     assert translate("110102", 2010, 2000) == ["110102", "110104"]
 
 
+def test_translate_name_change():
+    """
+    2002年，铁法市更名为调兵山市（代码不变，仍为211281）
+    """
+    """
+     * 辽宁省-铁岭市-铁法市(211281)
+    -> 辽宁省-铁岭市-调兵山市(211281) 2002
+    """
+    assert translate("211281", 1995, 2001) == ["211281"]
+    assert translate("211281", 1995, 2002) == ["211281"]
+    assert translate("211281", 1995, 2022) == ["211281"]
+
+    # 反向查询
+    assert translate("211281", 2022, 2001) == ["211281"]
+    assert translate("211281", 2022, 1996) == ["211281"]
+
+
 def test_translate_code_change():
     """
     1989年，锦西市升为地级市，锦州市的葫芦岛区……划归锦西市管辖
